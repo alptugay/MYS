@@ -16,6 +16,18 @@
                 invoke-rc.d rsyslog rotate > /dev/null
         endscript
 }
+
+/var/lib/docker/containers/*/*-json.log {
+	rotate 7
+	daily
+	missingok
+	notifempty
+	compress
+	copytruncate
+	postrotate
+	systemctl kill -s HUP rsyslog.service > /dev/null
+	endscript
+}
 {% endif %}
 
 {% if ansible_fqdn in groups['firewall'] %}
